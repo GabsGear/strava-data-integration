@@ -1,4 +1,4 @@
-# Project Name: Strava Data Integration with dbt, Snowflake, and Airflow
+# Strava Data Integration
 
 ## Overview
 This project demonstrates the process of integrating Strava API data into a Snowflake data warehouse using dbt (Data Build Tool) and Airflow. By following this project, you can learn how to collect and analyze your Strava fitness data in a structured and automated way.
