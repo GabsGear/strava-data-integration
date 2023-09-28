@@ -12,31 +12,6 @@ Before you begin, ensure you have the following prerequisites:
 - dbt  
 - Apache Airflow  
 
-## Project Structure
-
-``` 
-strava-data-integration/
-│
-├── strava/
-│ ├── strava_api.py
-│ └── config.yaml
-│
-├── snowflake/
-│ ├── snowflake-dbt-models/
-│ │ └── ...
-│ └── dbt_profiles.yml
-│
-├── airflow/
-│ ├── dags/
-│ │ └── strava_data_dag.py
-│ └── plugins/
-│ └── ...
-│
-├── README.md
-├── requirements.txt
-└── .gitignore
-```
-
 ## Setup
 1. Clone this repository to your local machine:
 ```
