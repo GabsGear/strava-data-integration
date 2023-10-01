@@ -4,10 +4,7 @@ from airflow.utils.dates import days_ago
 
 
 SNOWFLAKE_SCHEMA = 'STRAVA'
-SNOWFLAKE_WAREHOUSE = 'transforming'
 SNOWFLAKE_DATABASE = 'analytics'
-SNOWFLAKE_OUTPUT_TABLE = "raw_strava_activities"
-SNOWFLAKE_ACCOUNT = "on33804.us-east4.gcp"
 
 DBT_PROJECT_FOLDER = "airflow/dags/dbt/activities_data_integration"
 

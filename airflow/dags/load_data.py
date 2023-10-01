@@ -13,10 +13,10 @@ from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from datetime import timedelta
 
 SNOWFLAKE_SCHEMA = 'STRAVA'
-SNOWFLAKE_WAREHOUSE = 'transforming'
+SNOWFLAKE_WAREHOUSE = 'transforming'    
 SNOWFLAKE_DATABASE = 'analytics'
 SNOWFLAKE_OUTPUT_TABLE = "raw_strava_activities"
-SNOWFLAKE_ACCOUNT = "on33804.us-east4.gcp"
+SNOWFLAKE_ACCOUNT = os.getenv("SNOWFLAKE_ACCOUNT") 
 
 STRAVA_AUTH_URL = "https://www.strava.com/oauth/token"
 STRAVA_ACTIVITIES_URL = "https://www.strava.com/api/v3/athlete/activities"
