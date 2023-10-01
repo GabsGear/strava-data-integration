@@ -1,11 +1,16 @@
-from cosmos import DbtDag, ProjectConfig, ProfileConfig, ExecutionConfig
+from cosmos import DbtDag, ProjectConfig, ProfileConfig
 from cosmos.profiles import SnowflakeUserPasswordProfileMapping
+from airflow.utils.dates import days_ago
 
-from airflow import DAG
 
+SNOWFLAKE_SCHEMA = 'STRAVA'
+SNOWFLAKE_WAREHOUSE = 'transforming'
+SNOWFLAKE_DATABASE = 'analytics'
+SNOWFLAKE_OUTPUT_TABLE = "raw_strava_activities"
+SNOWFLAKE_ACCOUNT = "on33804.us-east4.gcp"
 
-from datetime import datetime
-import os
+DBT_PROJECT_FOLDER = "airflow/dags/dbt/activities_data_integration"
+
 
 profile_config = ProfileConfig(
     profile_name="activities_data_integration",
@@ -13,21 +18,21 @@ profile_config = ProfileConfig(
     profile_mapping=SnowflakeUserPasswordProfileMapping(
         conn_id="snowflake_default",
         profile_args={
-            "database": "ANALYTICS",
-            "schema": "STRAVA",
+            "database": SNOWFLAKE_DATABASE,
+            "schema": SNOWFLAKE_SCHEMA,
         },
     ),
 )
 
-my_cosmos_dag = DbtDag(
+
+activities_transform = DbtDag(
     project_config=ProjectConfig(
-        "airflow/dags/dbt/activities_data_integration",
+        DBT_PROJECT_FOLDER,
     ),
     profile_config=profile_config,
     schedule_interval=None,
-    start_date=datetime(2023, 1, 1),
+    start_date=days_ago(1),
     catchup=False,
     dag_id="activities_transformations",
+    tags=["transformations"],
 )
-
-my_cosmos_dag

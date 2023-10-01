@@ -1,5 +1,5 @@
-import pandas as pd
 import os
+
 import requests
 import snowflake.connector as snow
 import urllib3
@@ -9,14 +9,21 @@ from airflow.operators.python import PythonOperator
 from airflow.utils.dates import days_ago
 from pandas.io.json import json_normalize
 from snowflake.connector.pandas_tools import write_pandas
-
-snowflake_connection = BaseHook.get_connection("snowflake_default")
+from airflow.operators.trigger_dagrun import TriggerDagRunOperator
+from datetime import timedelta
 
 SNOWFLAKE_SCHEMA = 'STRAVA'
 SNOWFLAKE_WAREHOUSE = 'transforming'
 SNOWFLAKE_DATABASE = 'analytics'
 SNOWFLAKE_OUTPUT_TABLE = "raw_strava_activities"
 SNOWFLAKE_ACCOUNT = "on33804.us-east4.gcp"
+
+STRAVA_AUTH_URL = "https://www.strava.com/oauth/token"
+STRAVA_ACTIVITIES_URL = "https://www.strava.com/api/v3/athlete/activities"
+
+TASK_EXECUTION_TIMEOUT_SECONDS = 60 * 5
+
+snowflake_connection = BaseHook.get_connection("snowflake_default")
 
 
 def create_snowflake_python_connm():
@@ -34,8 +41,8 @@ def extract_strava_data():
     MAX_PAGES = 100
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-    auth_url = "https://www.strava.com/oauth/token"
-    activites_url = "https://www.strava.com/api/v3/athlete/activities"
+    auth_url = STRAVA_AUTH_URL
+    activites_url = STRAVA_ACTIVITIES_URL
 
     payload = {
         'client_id': os.getenv("STRAVA_CLIENT_ID"),
@@ -82,12 +89,18 @@ dag = DAG(
     'create_raw_tables',
     default_args=default_args,
     start_date=days_ago(1),
-    tags=['example'],
+    tags=['datafeeds'],
 )
 
 load_raw_data = PythonOperator(
     task_id='create_raw_data', dag=dag, python_callable=load_pandas_data_fo_snowflake
 )
 
+trigger_dbt_transformations = TriggerDagRunOperator(
+    trigger_dag_id="activities_transformations",
+    task_id="trigger_dbt_transformations",
+    execution_timeout=timedelta(seconds=TASK_EXECUTION_TIMEOUT_SECONDS),
+)
 
-load_raw_data
+
+load_raw_data >> trigger_dbt_transformations
