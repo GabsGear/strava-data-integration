@@ -5,6 +5,8 @@ This project demonstrates the process of integrating Strava API data into a Snow
 
 By following this project, you can learn how to collect and analyze your Strava fitness data in a structured and automated way.
 
+[Here a example dashboard with this data](https://lookerstudio.google.com/reporting/a8e8d37e-5730-4db0-ae0d-04e9a0a4cb6d)
+
 ## Prerequisites
 For run this project you will need [Docker Compose](https://docs.docker.com/compose/)
 
