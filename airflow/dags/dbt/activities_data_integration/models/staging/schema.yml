@@ -1,0 +1,9 @@
+version: 2
+
+models:
+  - name: stg_strava_activities
+    columns:
+      - name: ID
+        tests:
+          - unique
+          - not_null
