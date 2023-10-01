@@ -2,8 +2,9 @@ apache-airflow-providers-google
 apache-airflow-providers-postgres
 apache-airflow-providers-snowflake
 pandas
-dbt-snowflake
 urllib3
 dbt-core
+dbt-snowflake
+astronomer-cosmos
 astronomer-cosmos[dbt.all]
 snowflake-connector-python

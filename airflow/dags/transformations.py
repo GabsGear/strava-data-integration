@@ -1,58 +1,33 @@
+from cosmos import DbtDag, ProjectConfig, ProfileConfig, ExecutionConfig
+from cosmos.profiles import SnowflakeUserPasswordProfileMapping
+
 from airflow import DAG
-from airflow.providers.snowflake.operators.snowflake import SnowflakeOperator
-from airflow.utils.dates import days_ago
-
-SNOWFLAKE_CONN_ID = 'snowflake_default'
 
 
-SNOWFLAKE_SCHEMA = 'PUBLIC'
-SNOWFLAKE_WAREHOUSE = 'transforming'
-SNOWFLAKE_DATABASE = 'analytics'
-SNOWFLAKE_SAMPLE_TABLE = 'teste'
-S3_FILE_PATH = 'tabela.csv'
+from datetime import datetime
+import os
 
-# SQL commands
-CREATE_TABLE_SQL_STRING = (
-    f"CREATE OR REPLACE TRANSIENT TABLE {SNOWFLAKE_SAMPLE_TABLE} (name VARCHAR(250), id INT);"
-)
-SQL_INSERT_STATEMENT = f"INSERT INTO {SNOWFLAKE_SAMPLE_TABLE} VALUES ('name', %(id)s)"
-SQL_LIST = [SQL_INSERT_STATEMENT % {"id": n} for n in range(0, 10)]
-
-
-
-default_args = {
-    'owner': 'airflow',
-}
-
-dag = DAG(
-    'example_snowflake',
-    default_args=default_args,
-    start_date=days_ago(2),
-    tags=['example'],
+profile_config = ProfileConfig(
+    profile_name="activities_data_integration",
+    target_name="dev",
+    profile_mapping=SnowflakeUserPasswordProfileMapping(
+        conn_id="snowflake_default",
+        profile_args={
+            "database": "ANALYTICS",
+            "schema": "STRAVA",
+        },
+    ),
 )
 
-snowflake_op_sql_str = SnowflakeOperator(
-    task_id='snowflake_op_sql_str',
-    dag=dag,
-    snowflake_conn_id=SNOWFLAKE_CONN_ID,
-    sql=CREATE_TABLE_SQL_STRING,
-    warehouse=SNOWFLAKE_WAREHOUSE,
-    database=SNOWFLAKE_DATABASE,
-    schema=SNOWFLAKE_SCHEMA,
+my_cosmos_dag = DbtDag(
+    project_config=ProjectConfig(
+        "airflow/dags/dbt/activities_data_integration",
+    ),
+    profile_config=profile_config,
+    schedule_interval=None,
+    start_date=datetime(2023, 1, 1),
+    catchup=False,
+    dag_id="activities_transformations",
 )
 
-
-snowflake_op_with_params = SnowflakeOperator(
-    task_id='snowflake_op_with_params',
-    dag=dag,
-    snowflake_conn_id=SNOWFLAKE_CONN_ID,
-    sql=SQL_INSERT_STATEMENT,
-    parameters={"id": 56},
-    warehouse=SNOWFLAKE_WAREHOUSE,
-    database=SNOWFLAKE_DATABASE,
-    schema=SNOWFLAKE_SCHEMA,
-)
-
-
-
-snowflake_op_sql_str >> snowflake_op_with_params
+my_cosmos_dag
