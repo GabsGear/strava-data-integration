@@ -84,9 +84,6 @@ analytics.strava."ACTIVITIES"
 ```
 
 
-
-
-
 ## Contributing
 Contributions are welcome! If you'd like to enhance this project, feel free to fork it and submit a pull request.
 
