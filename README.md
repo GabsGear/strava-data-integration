@@ -7,7 +7,8 @@ By following this project, you can learn how to collect and analyze your Strava 
 
 [Here a example dashboard with this data](https://lookerstudio.google.com/reporting/a8e8d37e-5730-4db0-ae0d-04e9a0a4cb6d)
 
-![Uploading image.png…]()
+<img width="828" alt="image" src="https://github.com/GabsGear/strava-data-integration/assets/20424895/b38f366d-a82e-4ae0-9fb1-3dbee8375196">
+
 
 
 ## Prerequisites
