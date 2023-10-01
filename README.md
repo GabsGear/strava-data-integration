@@ -5,10 +5,10 @@ This project demonstrates the process of integrating Strava API data into a Snow
 
 By following this project, you can learn how to collect and analyze your Strava fitness data in a structured and automated way.
 
+<img width="1788" alt="image" src="https://github.com/GabsGear/strava-data-integration/assets/20424895/e3ceae11-3c69-46c7-bbb6-3e0d18a44c66">
+
+
 [Here a example dashboard with this data](https://lookerstudio.google.com/reporting/a8e8d37e-5730-4db0-ae0d-04e9a0a4cb6d)
-
-<img width="828" alt="image" src="https://github.com/GabsGear/strava-data-integration/assets/20424895/b38f366d-a82e-4ae0-9fb1-3dbee8375196">
-
 
 
 ## Prerequisites
