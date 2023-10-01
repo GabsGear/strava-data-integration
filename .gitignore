@@ -6,3 +6,4 @@ airflow/bin
 logs
 plugins
 .env
+dags
