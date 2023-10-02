@@ -19,6 +19,8 @@ Sign up for a Strava Developer Account (https://developers.strava.com/).
 
 Create a new OAuth Application on the Strava Developer Dashboard and obtain your client_id and client_secret.
 
+[Create a strava refresh token](https://developers.strava.com/docs/authentication/)
+
 ### SnowFlake Warehouse
 You will needs a snowflake project, with the following structure
 
