@@ -29,6 +29,8 @@ SNOWFLAKE_DATABASE = 'analytics'
 ```
 
 
+[In airflow create a connection called snowflake_default](http://localhost:8080/connection/list/)
+
 
 ## Setup
 
