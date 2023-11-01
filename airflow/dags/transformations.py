@@ -3,8 +3,8 @@ from cosmos.profiles import SnowflakeUserPasswordProfileMapping
 from airflow.utils.dates import days_ago
 
 
-SNOWFLAKE_SCHEMA = 'STRAVA'
-SNOWFLAKE_DATABASE = 'analytics'
+SNOWFLAKE_SCHEMA = "STRAVA"
+SNOWFLAKE_DATABASE = "analytics"
 
 DBT_PROJECT_FOLDER = "airflow/dags/dbt/activities_data_integration"
 

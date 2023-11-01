@@ -1,7 +1,9 @@
 dbt-core
 dbt-snowflake
 astronomer-cosmos
+# astro-sdk-python[amazon,snowflake]>=1.1.0
 apache-airflow-providers-snowflake
+apache-airflow-providers-amazon
 pandas
 numpy
 urllib3
