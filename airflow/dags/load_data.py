@@ -96,6 +96,13 @@ load_raw_data = PythonOperator(
     task_id="create_raw_data", dag=dag, python_callable=load_pandas_data_fo_snowflake
 )
 
+trigger_load_s3_to_snowflake = TriggerDagRunOperator(
+    trigger_dag_id="s3_to_snowflake",
+    task_id="trigger_s3_to_snowflake",
+    execution_timeout=timedelta(seconds=TASK_EXECUTION_TIMEOUT_SECONDS),
+)
+
+
 trigger_dbt_transformations = TriggerDagRunOperator(
     trigger_dag_id="activities_transformations",
     task_id="trigger_dbt_transformations",
@@ -103,4 +110,4 @@ trigger_dbt_transformations = TriggerDagRunOperator(
 )
 
 
-load_raw_data >> trigger_dbt_transformations
+[load_raw_data, trigger_load_s3_to_snowflake] >> trigger_dbt_transformations
