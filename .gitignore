@@ -11,3 +11,4 @@ airflow/dags/dbt/target/
 airflow/dags/dbt/dbt_modules/
 airflow/dags/dbt/logs/
 strava
+data/

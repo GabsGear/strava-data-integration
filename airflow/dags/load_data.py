@@ -12,11 +12,11 @@ from snowflake.connector.pandas_tools import write_pandas
 from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from datetime import timedelta
 
-SNOWFLAKE_SCHEMA = 'STRAVA'
-SNOWFLAKE_WAREHOUSE = 'transforming'    
-SNOWFLAKE_DATABASE = 'analytics'
+SNOWFLAKE_SCHEMA = "STRAVA"
+SNOWFLAKE_WAREHOUSE = "transforming"
+SNOWFLAKE_DATABASE = "analytics"
 SNOWFLAKE_OUTPUT_TABLE = "raw_strava_activities"
-SNOWFLAKE_ACCOUNT = os.getenv("SNOWFLAKE_ACCOUNT") 
+SNOWFLAKE_ACCOUNT = os.getenv("SNOWFLAKE_ACCOUNT")
 
 STRAVA_AUTH_URL = "https://www.strava.com/oauth/token"
 STRAVA_ACTIVITIES_URL = "https://www.strava.com/api/v3/athlete/activities"
@@ -45,11 +45,11 @@ def extract_strava_data():
     activites_url = STRAVA_ACTIVITIES_URL
 
     payload = {
-        'client_id': os.getenv("STRAVA_CLIENT_ID"),
-        'client_secret': os.getenv("STRAVA_CLIENT_SECRET"),
-        'refresh_token': os.getenv("STRAVA_REFRESH_TOKEN"),
-        'grant_type': "refresh_token",
-        'f': 'json',
+        "client_id": os.getenv("STRAVA_CLIENT_ID"),
+        "client_secret": os.getenv("STRAVA_CLIENT_SECRET"),
+        "refresh_token": os.getenv("STRAVA_REFRESH_TOKEN"),
+        "grant_type": "refresh_token",
+        "f": "json",
     }
 
     res = requests.post(auth_url, data=payload, verify=False)
@@ -57,8 +57,8 @@ def extract_strava_data():
     for page in range(1, MAX_PAGES + 1):
         response = requests.get(
             activites_url,
-            headers={'Authorization': 'Bearer ' + res.json()['access_token']},
-            params={'per_page': 200, 'page': page},
+            headers={"Authorization": "Bearer " + res.json()["access_token"]},
+            params={"per_page": 200, "page": page},
         ).json()
         if len(response) == 0:
             break
@@ -82,18 +82,18 @@ def load_pandas_data_fo_snowflake():
 
 
 default_args = {
-    'owner': 'airflow',
+    "owner": "airflow",
 }
 
 dag = DAG(
-    'create_raw_tables',
+    "create_raw_tables",
     default_args=default_args,
     start_date=days_ago(1),
-    tags=['datafeeds'],
+    tags=["datafeeds"],
 )
 
 load_raw_data = PythonOperator(
-    task_id='create_raw_data', dag=dag, python_callable=load_pandas_data_fo_snowflake
+    task_id="create_raw_data", dag=dag, python_callable=load_pandas_data_fo_snowflake
 )
 
 trigger_dbt_transformations = TriggerDagRunOperator(
